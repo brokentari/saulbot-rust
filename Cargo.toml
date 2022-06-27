@@ -1,0 +1,13 @@
+[package]
+name = "saulbot-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serenity = "0.11.2"
+tokio = { version = "1.19.2", features = ["full"] }
+rand = "0.8.5"
+serde = { version = "1.0.137", features = ["derive"] }
+serde_json = "1.0.81"
