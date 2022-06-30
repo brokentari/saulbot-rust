@@ -17,5 +17,6 @@ RUN apt-get update && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /usr/src/saulbot-rust/target/release/saulbot-rust /usr/src/app/saulbot-rust
 COPY --from=builder /usr/src/saulbot-rust/messages.json /usr/src/app/messages.json
+RUN ls -la /usr/src/app/saulbot-rust
 
 CMD ["/usr/src/app/saulbot-rust"]
