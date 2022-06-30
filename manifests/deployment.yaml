@@ -16,6 +16,5 @@ spec:
     spec:
       containers:
       - name: saulbot-rust-image
-        image: sauldocker.azurecr.io/saulbot-rust-image:v1
         ports:
         - containerPort: 80
