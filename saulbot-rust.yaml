@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saulbot-rust
+  labels:
+    app: saulbot-rust
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: saulbot
+  template:
+    metadata:
+      labels:
+        app: saulbot
+    spec:
+      containers:
+      - name: saulbot-rust-image
+        image: sauldocker.azurecr.io/saulbot-rust-image:v1
+        ports:
+        - containerPort: 80

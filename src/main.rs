@@ -94,7 +94,7 @@ async fn roll(ctx: &Context, msg: &Message) -> CommandResult {
 #[command]
 async fn personalize(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     // open the message.json file
-    let mut message_file = File::open("messages.json").unwrap();
+    let mut message_file = File::open("/usr/src/app/messages.json").unwrap();
     // read the message.json file
     let mut data = String::new();
     message_file
@@ -148,7 +148,7 @@ async fn personalize(ctx: &Context, msg: &Message, mut args: Args) -> CommandRes
         let serialized_list_of_messages =
             serde_json::to_string(&list_of_messages).expect(r#"Unable to serialize"#);
         // write the serialized list of messages to the message.json file
-        let mut message_file = File::create("messages.json").unwrap();
+        let mut message_file = File::create("/usr/src/app/messages.json").unwrap();
         message_file
             .write_all(serialized_list_of_messages.as_bytes())
             .expect("Unable to write to message.json");
