@@ -12,13 +12,10 @@ RUN rm ./target/release/deps/saulbot-rust* || true
 RUN cargo build --release
 
 FROM debian:buster-slim
-ARG APP=/usr/src/app
 
-RUN apt-get update \
-  && apt-get install -y ca-certificates tzdata \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /usr/src/saulbot-rust/target/release/saulbot-rust ${APP}/saulbot-rust
-COPY --from=builder /usr/src/saulbot-rust/messages.json ${APP}/messages.json
+COPY --from=builder /usr/src/saulbot-rust/target/release/saulbot-rust /usr/src/app/saulbot-rust
+COPY --from=builder /usr/src/saulbot-rust/messages.json /usr/src/app/messages.json
 
 CMD ["/usr/src/app/saulbot-rust"]
