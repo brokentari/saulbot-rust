@@ -49,8 +49,7 @@ jobs:
       with:
         manifests: |
           ./manifests/deployment.yaml
-        images: |
-          ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-        namespace: ${{ env.NAMESPACE }}
+        images: 'sauldocker.azurecr.io/saulbot-rust-image:${{ github.sha }}'
+        namespace: '${{ env.NAMESPACE }}'
     
     
