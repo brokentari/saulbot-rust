@@ -14,7 +14,7 @@ env:
 
 
 jobs:
-  build-and-push-image:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout GitHub Action'
@@ -25,18 +25,16 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: 'Build and push image'
+    - name: 'Login in to Azure registry'
       uses: azure/docker-login@v1
       with:
         login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-    - run: |
+    - name: 'Build and push image'
+      run: |
         docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/saulbot-rust-image:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/saulbot-rust-image:${{ github.sha }}
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
     - name: 'Set target AKS cluster'
       uses: azure/aks-set-context@v1
       with:
