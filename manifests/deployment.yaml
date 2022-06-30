@@ -19,4 +19,4 @@ spec:
         image: sauldocker.azurecr.io/saulbot-rust-image
         ports:
         - containerPort: 80
-      imagePullPolicy: Always
+        imagePullPolicy: Always
