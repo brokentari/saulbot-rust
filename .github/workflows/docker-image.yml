@@ -50,7 +50,7 @@ jobs:
       uses: azure/k8s-deploy@v1
       with:
         manifests: |
-          ${{ github.workspace }}/manifests/deployment.yaml
+          ./manifests/deployment.yaml
         images: |
           ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
         namespace: ${{ env.NAMESPACE }}
