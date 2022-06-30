@@ -24,7 +24,7 @@ struct PersonalizedMessages {
 }
 
 #[group]
-#[commands(ping, gamble, roll, personalize)]
+#[commands(ping, gamble, roll, personalize, test_kubernetes)]
 struct General;
 
 struct Handler;
@@ -92,6 +92,13 @@ async fn roll(ctx: &Context, msg: &Message) -> CommandResult {
 }
 
 #[command]
+async fn test_kubernetes(ctx: &Context, msg: &Message) -> CommandResult {
+    msg.reply(ctx, "Kubernetes is working!").await?;
+
+    Ok(())
+}
+
+#[command]
 async fn personalize(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     // open the message.json file
     let mut message_file = File::open("/usr/src/app/messages.json").unwrap();
@@ -151,7 +158,7 @@ async fn personalize(ctx: &Context, msg: &Message, mut args: Args) -> CommandRes
         let mut message_file = File::create("/usr/src/app/messages.json").unwrap();
         message_file
             .write_all(serialized_list_of_messages.as_bytes())
-            .expect("Unable to write to message.json");
+            .expect("Unable to  write to message.json");
 
         msg.reply(ctx, "message set sucessfully!").await?;
     }

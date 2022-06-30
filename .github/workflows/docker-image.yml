@@ -33,8 +33,8 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - name: 'Build and push image'
       run: |
-        docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/saulbot-rust-image:${{ github.sha }}
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/saulbot-rust-image:${{ github.sha }}
+        docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_NAME}}:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_NAME}}:${{ github.sha }}
     - name: 'Set target AKS cluster'
       uses: azure/aks-set-context@v1
       with:
@@ -50,7 +50,7 @@ jobs:
         manifests: |
           ./manifests/deployment.yaml
         images: |
-          ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+          ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
         namespace: ${{ env.NAMESPACE }}
     
     
