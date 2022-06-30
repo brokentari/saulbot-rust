@@ -1,13 +1,20 @@
-name: Docker Image CI
+name: Deploy to Azure Kubernetes
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    
+env:
+  CLUSTER_NAME: "saulbot-rust"
+  CLUSTER_RESOURCE_GROUP: "saul-rg"
+  NAMESPACE: "saul"
+  IMAGE_NAME: "saulbot-rust-image"
+
 
 jobs:
-  build-and-deploy:
+  build-and-push-image:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout GitHub Action'
@@ -27,4 +34,25 @@ jobs:
     - run: |
         docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/saulbot-rust-image:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/saulbot-rust-image:${{ github.sha }}
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Set target AKS cluster'
+      uses: azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
+    - name: 'Create namespace'
+      run: |
+        kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o json | kubectl apply -f - 
+    - name: Deploy to AKS
+      uses: azure/k8s-deploy@v1
+      with:
+        manifests: |
+          ${{ github.workspace }}/manifests/deployment.yaml
+        images: |
+          ${{ secrets.REGISTRY_LOGIN_SERVER }}.azurecr.io/${{ env.APP_NAME }}:${{ github.sha }}
+        namespace: ${{ env.NAMESPACE }}
+    
     
