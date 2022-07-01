@@ -18,6 +18,7 @@ RUN apt-get update && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /saulbot-rust/target/release/saulbot-rust /saulbot-rust
 COPY --from=builder /saulbot-rust/messages.json /messages.json
-RUN ls -la /
+COPY --from=builder /saulbot-rust/src/main.rs /main.rs
+RUN cat /main.rs
 
 CMD ["/saulbot-rust"]
