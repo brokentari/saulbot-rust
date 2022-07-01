@@ -5,11 +5,14 @@ RUN cargo new --bin saulbot-rust
 WORKDIR /saulbot-rust
 RUN pwd
 COPY ./Cargo.toml ./Cargo.toml
-RUN ls -al
 RUN cargo build --release && rm src/*.rs
 
-COPY . ./
+COPY . /saulbot-rust
+RUN cat ./src/main.rs
+RUN ls -al ./target/release/deps
 RUN rm ./target/release/deps/saulbot-rust* || true
+RUN rm ./target/release/deps/saulbot_rust* || true
+RUN ls -al
 RUN cargo build --release
 
 FROM debian:buster-slim
