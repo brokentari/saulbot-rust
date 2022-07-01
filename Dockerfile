@@ -1,11 +1,12 @@
 FROM rust as builder
 
-WORKDIR /usr/src/
-RUN USER=root cargo new --bin saulbot-rust
-WORKDIR /usr/src/saulbot-rust
+
+RUN cargo new --bin saulbot-rust
+WORKDIR /saulbot-rust
+RUN pwd
 COPY ./Cargo.toml ./Cargo.toml
-RUN cargo build --release
-RUN rm src/*.rs
+RUN ls -al
+RUN cargo build --release && rm src/*.rs
 
 COPY . ./
 RUN rm ./target/release/deps/saulbot-rust* || true
@@ -15,8 +16,8 @@ FROM debian:buster-slim
 
 RUN apt-get update && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /usr/src/saulbot-rust/target/release/saulbot-rust /usr/src/app/saulbot-rust
-COPY --from=builder /usr/src/saulbot-rust/messages.json /usr/src/app/messages.json
-RUN ls -la /usr/src/app/saulbot-rust
+COPY --from=builder /saulbot-rust/target/release/saulbot-rust /saulbot-rust
+COPY --from=builder /saulbot-rust/messages.json /messages.json
+RUN ls -la /
 
-CMD ["/usr/src/app/saulbot-rust"]
+CMD ["/saulbot-rust"]
